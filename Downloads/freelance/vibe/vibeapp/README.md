@@ -25,6 +25,20 @@ VIBE is a comprehensive Flutter application designed to enhance communication an
 - **Dynamic Lighting and Color Coding**: Uses lighting effects and color schemes for enhanced understanding
 - **Accessibility Profiles**: Customizable settings for different user needs
 
+## GitHub Actions
+
+This repository uses GitHub Actions to automatically build APK files for Android. The workflow is configured to:
+
+- Build both Debug and Release APK files
+- Run tests automatically
+- Upload APK files as downloadable artifacts
+- Create GitHub releases for the main branch
+
+To download the latest APK:
+1. Go to the "Actions" tab in this repository
+2. Find the latest successful workflow run
+3. Download the APK from the "Artifacts" section
+
 ## Getting Started
 
 ### Prerequisites
