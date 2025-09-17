@@ -1,0 +1,71 @@
+name: vibe_app
+description: Visual and Interactive-Based Experience for the Hearing Impaired
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # UI and Navigation
+  cupertino_icons: ^1.0.2
+  go_router: ^12.1.3
+  flutter_svg: ^2.0.9
+  lottie: ^2.7.0
+  page_transition: ^2.1.0
+  shimmer: ^3.0.0
+  
+  # State Management
+  provider: ^6.1.1
+  riverpod: ^2.4.9
+  flutter_riverpod: ^2.4.9
+  
+  # Audio and Video
+  audioplayers: ^5.2.1
+  video_player: ^2.8.2
+  speech_to_text: ^6.6.0
+  flutter_tts: ^3.8.5
+  
+  # Camera and Sensors
+  camera: ^0.10.5+5
+  sensors_plus: ^4.0.2
+  vibration: ^1.8.4
+  
+  # Machine Learning and AI (commented out for web compatibility)
+  # tflite_flutter: ^0.10.4
+  image: ^4.1.3
+  
+  # Networking and Data
+  http: ^1.1.2
+  shared_preferences: ^2.2.2
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  
+  # Accessibility
+  flutter_screenutil: ^5.9.0
+  flutter_localizations:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^3.0.0
+
+flutter:
+  uses-material-design: true
+  
+  assets:
+    - assets/images/
+    - assets/icons/
+    - assets/animations/
+    - assets/sounds/
+    - assets/models/
+    - assets/images/logostart.png
+  
+  # fonts:
+  #   - family: SignLanguage
+  #     fonts:
+  #       - asset: assets/fonts/SignLanguage-Regular.ttf

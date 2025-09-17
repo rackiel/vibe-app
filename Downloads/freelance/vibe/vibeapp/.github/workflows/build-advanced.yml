@@ -1,0 +1,109 @@
+name: Advanced Flutter APK Build
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+    inputs:
+      build_type:
+        description: 'Build type'
+        required: true
+        default: 'release'
+        type: choice
+        options:
+        - debug
+        - release
+        - profile
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        build-type: [debug, release, profile]
+        
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'zulu'
+        java-version: '17'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.32.4'
+        channel: 'stable'
+        cache: true
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Analyze code
+      run: flutter analyze
+      
+    - name: Run tests
+      run: flutter test --coverage
+      
+    - name: Build APK (${{ matrix.build-type }})
+      run: flutter build apk --${{ matrix.build-type }}
+      
+    - name: Upload APK Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: app-${{ matrix.build-type }}-apk
+        path: build/app/outputs/flutter-apk/app-${{ matrix.build-type }}.apk
+        retention-days: 30
+        
+    - name: Upload Test Coverage
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report
+        path: coverage/
+        retention-days: 7
+
+  create-release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+    - name: Download Release APK
+      uses: actions/download-artifact@v4
+      with:
+        name: app-release-apk
+        path: ./apks/
+        
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        files: |
+          ./apks/app-release.apk
+        tag_name: v${{ github.run_number }}
+        name: VIBE App v${{ github.run_number }}
+        body: |
+          ## VIBE App Release
+          
+          **Visual Interactive Experience for the Hearing Impaired**
+          
+          ### What's New
+          - Latest build from commit ${{ github.sha }}
+          - Built on ${{ github.event.head_commit.timestamp }}
+          
+          ### Download
+          - **APK**: Download the APK file below to install on your Android device
+          
+          ### Installation
+          1. Download the APK file
+          2. Enable "Install from unknown sources" in your Android settings
+          3. Install the APK file
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
